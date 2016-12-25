@@ -1,0 +1,23 @@
+{
+  "name": "reactions.js",
+  "version": "1.0.0",
+  "description": "Reaction Bot for Discord Memes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Blake Randall",
+  "keywords": [
+    "discord",
+    "bot",
+    "reactions",
+    "keywords"
+  ],
+  "repository": "",
+  "license": "ISC",
+  "dependencies": {
+    "eris": "^0.5.1",
+    "path": "^0.12.7",
+    "request": "^2.79.0"
+  }
+}
