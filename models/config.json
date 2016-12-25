@@ -1,0 +1,8 @@
+{
+    "Driver": "mysql",
+    "Database": "reactions",
+    "Username": "reactions_adm",
+    "Password": "SECRET",
+    "Host": "localhost",
+    "Port": "3306"
+}
