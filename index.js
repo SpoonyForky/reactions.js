@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const request = require('request');
 const extentions = require(path.join(__dirname, 'extentions'));
+const extensions = require(path.join(__dirname, 'extensions'));
 const config = require(path.join(__dirname, 'config.json'));
 const db = require(path.join(__dirname, 'models'));
 const erisapi = require("eris");
