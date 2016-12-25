@@ -2,7 +2,6 @@
 const path = require('path');
 const fs = require('fs');
 const request = require('request');
-const extentions = require(path.join(__dirname, 'extentions'));
 const extensions = require(path.join(__dirname, 'extensions'));
 const config = require(path.join(__dirname, 'config.json'));
 const db = require(path.join(__dirname, 'models'));
@@ -64,7 +63,7 @@ function _ReactionToMessage(msg) {
 
 client.on('ready', () => {
 	client.guilds.forEach((guild) => {
-		client.editNickname(guild.id, config.Nickname);
+		client.editNickname(guild.id, config.Nickname).then((success) => { }, (err) => { });
 	});
 });
 
@@ -79,7 +78,7 @@ client.on('disconnect', () => {
 
 client.on('guildMemberUpdate', (guild, member, oldMember) => {
 	if (member.user == client.user) {
-		client.editNickname(guild.id, config.Nickname);
+		client.editNickname(guild.id, config.Nickname).then((success) => { }, (err) => { });
 	}
 });
 
