@@ -1,3 +1,6 @@
+const path = require('path');
+const config = require(path.join(__dirname, 'config.json'));
+
 module.exports = function (sequelize, DataTypes) {
     var KeywordType = sequelize.define("KeywordType", {
         Name: {
@@ -7,6 +10,8 @@ module.exports = function (sequelize, DataTypes) {
     }, {
             underscored: true,
             timestamps: false,
+            charset: config.Charset,
+            collate: config.Collate,
             tableName: 'keyword_types',
             classMethods: {
                 associate: function (models) {
