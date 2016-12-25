@@ -4,5 +4,7 @@
     "Username": "reactions_adm",
     "Password": "SECRET",
     "Host": "localhost",
-    "Port": "3306"
+    "Port": "3306",
+    "Charset": "utf8mb4",
+    "Collate": "utf8mb4_unicode_ci"
 }
