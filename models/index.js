@@ -5,7 +5,11 @@ const fs = require('fs');
 const sequelize = require('sequelize');
 const config = require(path.join(__dirname, 'config.json'));
 const db = new sequelize(`${config.Driver}://${config.Username}:${config.Password}@${config.Host}:${config.Port}/${config.Database}`, {
-    logging: false
+    logging: false,
+    dialectOptions: {
+        charset: config.Charset,
+        collate: config.Collate,
+    }
 });
 
 const models = {};

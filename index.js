@@ -44,21 +44,18 @@ const client = new erisapi.CommandClient(config.Token, {}, {
 const commands = require(path.join(__dirname, 'commands'))(client);
 
 function _ReactionToMessage(msg) {
-	request({
-		url: 'https://reactions.blakerandall.xyz/api/SearchKeywords',
-		method: 'POST',
-		form: {
-			KeywordSearch: msg.content
-		}
-	}, function (err, httpResponse, body) {
-		var keywords = JSON.parse(body);
-		keywords.forEach((k) => {
-			var emojis = k.emojis;
-			emojis.forEach((e) => {
-				client.addMessageReaction(msg.channel.id, msg.id, e.code).then((msg) => { }, (err) => { });
-			});
+	db.models.Keyword.findAll({
+		include: [{
+			model: db.models.Emoji
+		}]
+	}).then((keywords) => {
+		var emojis = keywords.filter((keyword) => extensions.regex(keyword.get('Regex')).test(msg.content))
+			.map((keyword) => keyword.get('Emojis')
+				.map((emoji) => emoji.get('Code')).join(''));
+		emojis.forEach((e) => {
+			client.addMessageReaction(msg.channel.id, msg.id, e).then((msg) => { }, (err) => { console.log(err) });
 		});
-	});
+	}, (err) => { });
 }
 
 client.on('ready', () => {
