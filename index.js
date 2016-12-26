@@ -50,10 +50,18 @@ function _ReactionToMessage(msg) {
             model: db.models.Emoji
         }]
     }).then((keywords) => {
-        var emojis = keywords.filter((keyword) => extensions.regex(keyword.get('Regex')).test(msg.content))
-            .map((keyword) => keyword.get('Emojis'))
-            .flatten
-            .map((emoji) => ({ name: emoji.get('Name'), code: emoji.get('Code') }));
+        var emojis = keywords.map((keyword) => ({
+            name: keyword.get('Name'),
+            regex: keyword.get('Regex'),
+            emojis: keyword.get('Emojis')
+                .map((emoji) => ({
+                    name: emoji.get('Name'),
+                    code: emoji.get('Code')
+                }))
+        })).filter((keyword) => extensions.regex(keyword.regex).test(msg.content))
+            .map((keyword) => keyword.emojis)
+            .flatten;
+
         emojis.forEach((e) => client.addMessageReaction(msg.channel.id, msg.id, e.code).then((msg) => { }, (err) => { }));
     }, (err) => { });
 }

@@ -1,6 +1,8 @@
 "use strict";
 
-const request = require('request');
+const path = require('path');
+const extensions = require(path.join(__dirname, '..', 'extensions'));
+const db = require(path.join(__dirname, '..', 'models'));
 
 class Emojify {
     constructor(client) {
@@ -15,18 +17,29 @@ class Emojify {
         var obj = {
         };
         obj[this.basename] = (msg, args) => {
-            request({
-                url: 'https://reactions.blakerandall.xyz/api/ReplaceKeywords',
-                method: 'POST',
-                form: {
-                    KeywordReplace: args
-                }
-            }, (err, httpResponse, body) => {
-                var emojis = JSON.parse(body).join(' ');
+            db.models.Keyword.findAll({
+                include: [{
+                    model: db.models.Emoji
+                }]
+            }).then((keywords) => {
+                var emojis = keywords.map((keyword) => ({
+                    name: keyword.get('Name'),
+                    regex: keyword.get('Regex'),
+                    emojis: keyword.get('Emojis')
+                        .map((emoji) => ({
+                            name: emoji.get('Name'),
+                            code: emoji.get('Code')
+                        }))
+                })).filter((keyword) => extensions.regex(keyword.regex).test(msg.content))
+                    .map((keyword) => keyword.emojis)
+                    .flatten
+                    .map((emoji) => emoji.code)
+                    .join('');
+
                 this.client.createMessage(msg.channel.id, {
                     content: emojis.replace(/(\:[\w]+\:[\d]+)/gi, (match, group1) => `<${group1}>`)
                 }, null).then((msg) => { }, (err) => { });
-            });
+            }, (err) => { });
         };
         return obj;
     }
