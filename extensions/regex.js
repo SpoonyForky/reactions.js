@@ -1,5 +1,5 @@
 RegExp.compileFromString = (str) => {
-    var r = /^\/(.+?)\/([gmi]+?)$/i.compile();
+    var r = /^\/(.+?)\/([gmi]+?)$/i;
     if (!r.test(str)) return null;
     else {
         var x = r.exec(str);
@@ -8,7 +8,7 @@ RegExp.compileFromString = (str) => {
 };
 
 module.exports = (str) => {
-    var r = /^\/(.+?)\/([gmi]+?)$/i.compile();
+    var r = /^\/(.+?)\/([gmi]+?)$/i;
     if (!r.test(str)) return null;
     else {
         var x = r.exec(str);
