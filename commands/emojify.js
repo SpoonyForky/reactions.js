@@ -33,6 +33,14 @@ class Emojify {
                 })).filter((keyword) => extensions.regex(keyword.regex).test(msg.content))
                     .map((keyword) => keyword.emojis)
                     .flatten
+                    .filter((emoji) => {
+                        if (/^\:[\w]+\:[\d]+$/gi.test(emoji.code)) {
+                            return msg.guild.emojis
+                                .map((availEmoji) => ({ name: availEmoji.name, code: `:${availEmoji.name}:${availEmoji.id}` }))
+                                .some((availEmoji) => availEmoji.code == emoji.code);
+                        }
+                        return true;
+                    })
                     .map((emoji) => emoji.code)
                     .join('');
 

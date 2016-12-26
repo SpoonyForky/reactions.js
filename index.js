@@ -60,7 +60,15 @@ function _ReactionToMessage(msg) {
                 }))
         })).filter((keyword) => extensions.regex(keyword.regex).test(msg.content))
             .map((keyword) => keyword.emojis)
-            .flatten;
+            .flatten
+            .filter((emoji) => {
+                if (/^\:[\w]+\:[\d]+$/gi.test(emoji.code)) {
+                    return msg.guild.emojis
+                        .map((availEmoji) => ({ name: availEmoji.name, code: `:${availEmoji.name}:${availEmoji.id}` }))
+                        .some((availEmoji) => availEmoji.code == emoji.code);
+                }
+                return true;
+            });
 
         emojis.forEach((e) => client.addMessageReaction(msg.channel.id, msg.id, e.code).then((msg) => { }, (err) => { }));
     }, (err) => { });
